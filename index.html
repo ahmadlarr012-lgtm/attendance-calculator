@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Calculator - For Med Students</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Attendance Calculator</h1>
+            <p class="subtitle">Track your attendance and never miss a lecture!</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="subjects">Subjects</button>
+            <button class="tab-btn" data-tab="timetable">Timetable</button>
+            <button class="tab-btn" data-tab="attendance">Log Attendance</button>
+            <button class="tab-btn" data-tab="analytics">Analytics</button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content active">
+            <h2>Dashboard</h2>
+            <div id="dashboard-container" class="dashboard-grid">
+                <div class="empty-state">
+                    <p>👋 Welcome! Start by adding subjects to track your attendance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subjects Tab -->
+        <section id="subjects" class="tab-content">
+            <h2>Manage Subjects</h2>
+            <div class="section-header">
+                <button class="btn btn-primary" onclick="openAddSubjectModal()">+ Add Subject</button>
+            </div>
+            <div id="subjects-list" class="subjects-grid">
+                <div class="empty-state">No subjects added yet. Click 'Add Subject' to get started!</div>
+            </div>
+        </section>
+
+        <!-- Timetable Tab -->
+        <section id="timetable" class="tab-content">
+            <h2>Upload Timetable</h2>
+            <div class="timetable-container">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📄</div>
+                    <h3>Upload Timetable</h3>
+                    <p>Drag and drop your timetable (PDF or PNG) or click to select</p>
+                    <input type="file" id="timetableFile" accept=".pdf,.png,.jpg,.jpeg" style="display: none;">
+                </div>
+                <div id="timetablePreview" class="timetable-preview" style="display: none;">
+                    <div class="preview-header">
+                        <h3>Timetable Preview</h3>
+                        <button class="btn btn-danger" onclick="removeTimetable()">Remove</button>
+                    </div>
+                    <img id="timetableImage" src="" alt="Timetable" style="max-width: 100%;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Attendance Tab -->
+        <section id="attendance" class="tab-content">
+            <h2>Log Attendance</h2>
+            <div id="attendance-container">
+                <div class="empty-state">No subjects to log attendance. Add subjects first!</div>
+            </div>
+        </section>
+
+        <!-- Analytics Tab -->
+        <section id="analytics" class="tab-content">
+            <h2>Attendance Analytics</h2>
+            <div id="analytics-container">
+                <div class="empty-state">Analytics will appear here once you start logging attendance.</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div id="addSubjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Subject</h2>
+                <button class="close-btn" onclick="closeAddSubjectModal()">&times;</button>
+            </div>
+            <form id="addSubjectForm" onsubmit="addSubject(event)">
+                <div class="form-group">
+                    <label for="subjectName">Subject Name *</label>
+                    <input type="text" id="subjectName" required placeholder="e.g., Anatomy, Biochemistry">
+                </div>
+                <div class="form-group">
+                    <label for="minAttendance">Minimum Attendance % *</label>
+                    <input type="number" id="minAttendance" required min="1" max="100" placeholder="e.g., 75" value="75">
+                </div>
+                <div class="form-group">
+                    <label for="totalLectures">Total Lectures Conducted *</label>
+                    <input type="number" id="totalLectures" required min="1" placeholder="e.g., 40">
+                </div>
+                <div class="form-group">
+                    <label for="attendedLectures">Lectures Attended So Far *</label>
+                    <input type="number" id="attendedLectures" required min="0" placeholder="e.g., 30" value="0">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddSubjectModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Subject Modal -->
+    <div id="editSubjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Subject</h2>
+                <button class="close-btn" onclick="closeEditSubjectModal()">&times;</button>
+            </div>
+            <form id="editSubjectForm" onsubmit="saveEditSubject(event)">
+                <div class="form-group">
+                    <label for="editSubjectName">Subject Name *</label>
+                    <input type="text" id="editSubjectName" required placeholder="e.g., Anatomy">
+                </div>
+                <div class="form-group">
+                    <label for="editMinAttendance">Minimum Attendance % *</label>
+                    <input type="number" id="editMinAttendance" required min="1" max="100" placeholder="e.g., 75">
+                </div>
+                <div class="form-group">
+                    <label for="editTotalLectures">Total Lectures Conducted *</label>
+                    <input type="number" id="editTotalLectures" required min="1" placeholder="e.g., 40">
+                </div>
+                <div class="form-group">
+                    <label for="editAttendedLectures">Lectures Attended So Far *</label>
+                    <input type="number" id="editAttendedLectures" required min="0" placeholder="e.g., 30">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditSubjectModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Attendance Modal -->
+    <div id="quickAttendanceModal" class="modal">
+        <div class="modal-content quick-attendance">
+            <div class="modal-header">
+                <h2 id="quickAttendanceTitle">Did you attend?</h2>
+                <button class="close-btn" onclick="closeQuickAttendanceModal()">&times;</button>
+            </div>
+            <div class="quick-attendance-body">
+                <p id="quickAttendanceSubject" class="subject-name"></p>
+                <div class="quick-buttons">
+                    <button class="btn btn-success btn-large" onclick="markAttendance(true)">✓ Yes, Attended</button>
+                    <button class="btn btn-danger btn-large" onclick="markAttendance(false)">✗ No, Missed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
