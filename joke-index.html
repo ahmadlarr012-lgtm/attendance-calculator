@@ -3,71 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Joke Generator</title>
+    <title>Random Joke Generator - Cool Design</title>
     <link rel="stylesheet" href="joke-style.css">
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
     <div class="container">
-        <div class="joke-card">
-            <div class="header">
-                <h1>😂 Random Joke Generator</h1>
-                <p class="subtitle">Laugh out loud with random jokes!</p>
+        <!-- Navigation Header -->
+        <div class="navbar">
+            <div class="nav-brand">
+                <span class="brand-icon">😂</span>
+                <span class="brand-text">JokeHub</span>
             </div>
-
-            <div class="joke-display">
-                <div class="joke-content" id="jokeContent">
-                    <p class="loading">Loading a joke for you...</p>
+            <div class="nav-stats">
+                <div class="nav-stat">
+                    <span class="stat-icon">🎭</span>
+                    <span id="navJokesCount">0</span>
                 </div>
-                <div class="joke-type" id="jokeType"></div>
-            </div>
-
-            <div class="controls">
-                <button class="btn btn-primary" id="newJokeBtn" onclick="getNewJoke()">
-                    <span class="btn-icon">🎭</span> Get New Joke
-                </button>
-                <button class="btn btn-secondary" id="copyBtn" onclick="copyJoke()" style="display: none;">
-                    <span class="btn-icon">📋</span> Copy Joke
-                </button>
-                <button class="btn btn-info" id="shareBtn" onclick="shareJoke()" style="display: none;">
-                    <span class="btn-icon">🔗</span> Share
-                </button>
-            </div>
-
-            <div class="filter-section">
-                <h3>Filter by Type:</h3>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="setFilter('all')">All</button>
-                    <button class="filter-btn" onclick="setFilter('general')">General</button>
-                    <button class="filter-btn" onclick="setFilter('programming')">Programming</button>
-                    <button class="filter-btn" onclick="setFilter('knock-knock')">Knock-Knock</button>
+                <div class="nav-stat">
+                    <span class="stat-icon" id="navApiStatus">🟢</span>
                 </div>
-            </div>
-
-            <div class="stats">
-                <div class="stat">
-                    <span class="stat-label">Jokes Loaded:</span>
-                    <span class="stat-value" id="jokesCount">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">API Status:</span>
-                    <span class="stat-value status-good" id="apiStatus">✓ Online</span>
-                </div>
-            </div>
-
-            <div class="history-section">
-                <h3>Recent Jokes <span id="historyCount">(0)</span></h3>
-                <div class="history-list" id="historyList">
-                    <p class="empty-message">No jokes yet. Generate one to get started!</p>
-                </div>
-                <button class="btn btn-danger btn-small" id="clearHistoryBtn" onclick="clearHistory()" style="display: none;">
-                    Clear History
-                </button>
             </div>
         </div>
+
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-card filter-card">
+                    <h3>✨ Joke Types</h3>
+                    <div class="filter-buttons-vertical">
+                        <button class="filter-btn-vertical active" onclick="setFilter('all')">
+                            <span class="filter-icon">🎪</span>
+                            <span>All Jokes</span>
+                        </button>
+                        <button class="filter-btn-vertical" onclick="setFilter('general')">
+                            <span class="filter-icon">😄</span>
+                            <span>General</span>
+                        </button>
+                        <button class="filter-btn-vertical" onclick="setFilter('programming')">
+                            <span class="filter-icon">💻</span>
+                            <span>Programming</span>
+                        </button>
+                        <button class="filter-btn-vertical" onclick="setFilter('knock-knock')">
+                            <span class="filter-icon">🚪</span>
+                            <span>Knock-Knock</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-card stats-card">
+                    <h3>📊 Stats</h3>
+                    <div class="stats-vertical">
+                        <div class="stat-item">
+                            <span class="stat-label">Loaded</span>
+                            <span class="stat-value-big" id="sidebarJokesCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-status" id="sidebarApiStatus">🟢 Online</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Joke Display -->
+            <main class="main-joke-section">
+                <div class="joke-card-main">
+                    <div class="joke-card-header">
+                        <h1>🎭 Random Joke Generator</h1>
+                        <p class="header-subtitle">Laugh out loud with amazing jokes!</p>
+                    </div>
+
+                    <div class="joke-display-main">
+                        <div class="joke-content-main" id="jokeContent">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>Loading a joke for you...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="joke-info-bar">
+                        <span class="joke-type-badge" id="jokeType">Waiting...</span>
+                        <span class="joke-counter" id="jokeCounter">Ready</span>
+                    </div>
+
+                    <div class="controls-main">
+                        <button class="btn btn-main" id="newJokeBtn" onclick="getNewJoke()">
+                            <span class="btn-icon-main">🎭</span>
+                            <span class="btn-text">Get New Joke</span>
+                            <span class="btn-shimmer"></span>
+                        </button>
+                        <button class="btn btn-secondary-main" id="copyBtn" onclick="copyJoke()" style="display: none;">
+                            <span class="btn-icon-main">📋</span>
+                            <span>Copy</span>
+                        </button>
+                        <button class="btn btn-secondary-main" id="shareBtn" onclick="shareJoke()" style="display: none;">
+                            <span class="btn-icon-main">🔗</span>
+                            <span>Share</span>
+                        </button>
+                    </div>
+
+                    <div class="joke-features">
+                        <div class="feature">
+                            <span class="feature-icon">⚡</span>
+                            <span class="feature-text">Instant Loading</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">🎯</span>
+                            <span class="feature-text">Multiple Types</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">💾</span>
+                            <span class="feature-text">Auto Saved</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - History -->
+            <aside class="sidebar sidebar-right">
+                <div class="sidebar-card history-card">
+                    <div class="history-header">
+                        <h3>📜 Recent Jokes</h3>
+                        <span class="history-badge" id="historyCount">0</span>
+                    </div>
+                    <div class="history-list-scroll" id="historyList">
+                        <p class="empty-history">No jokes yet. Generate one!</p>
+                    </div>
+                    <button class="btn btn-clear" id="clearHistoryBtn" onclick="clearHistory()" style="display: none;">
+                        🗑️ Clear
+                    </button>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with ❤️ | Powered by Official Joke API | © 2024</p>
+        </footer>
     </div>
 
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
+
+    <!-- Particle Effect -->
+    <div class="particle-container" id="particleContainer"></div>
 
     <script src="joke-app.js"></script>
 </body>
