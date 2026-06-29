@@ -11,9 +11,6 @@ class JokeGenerator {
         this.getNewJoke();
     }
 
-    /**
-     * Fetch a new joke based on current filter
-     */
     async getNewJoke() {
         try {
             const jokeBtn = document.getElementById('newJokeBtn');
@@ -51,41 +48,31 @@ class JokeGenerator {
         }
     }
 
-    /**
-     * Display joke on the UI
-     */
     displayJoke(joke) {
         const jokeContent = document.getElementById('jokeContent');
         const jokeType = document.getElementById('jokeType');
 
         let jokeHTML = '';
 
-        // Check if it's a two-part joke (setup + delivery)
         if (joke.setup && joke.delivery) {
             jokeHTML = `
                 <p>${joke.setup}</p>
                 <p class="punchline">${joke.delivery}</p>
             `;
         } else if (joke.joke) {
-            // Single-part joke
             jokeHTML = `<p>${joke.joke}</p>`;
         }
 
         jokeContent.innerHTML = jokeHTML;
         
-        // Display joke type
         const type = joke.type || 'general';
         jokeType.textContent = `Type: ${type}`;
         jokeType.className = `joke-type`;
 
-        // Show copy and share buttons
         document.getElementById('copyBtn').style.display = 'inline-flex';
         document.getElementById('shareBtn').style.display = 'inline-flex';
     }
 
-    /**
-     * Display error message
-     */
     displayError(message) {
         const jokeContent = document.getElementById('jokeContent');
         jokeContent.innerHTML = `<p class="error">❌ ${message}</p>`;
@@ -94,15 +81,12 @@ class JokeGenerator {
         document.getElementById('shareBtn').style.display = 'none';
     }
 
-    /**
-     * Copy joke to clipboard
-     */
     copyJoke() {
         if (!this.currentJoke) return;
 
         let jokeText = '';
         if (this.currentJoke.setup && this.currentJoke.delivery) {
-            jokeText = `${this.currentJoke.setup}\\n${this.currentJoke.delivery}`;
+            jokeText = `${this.currentJoke.setup}\n${this.currentJoke.delivery}`;
         } else if (this.currentJoke.joke) {
             jokeText = this.currentJoke.joke;
         }
@@ -114,15 +98,12 @@ class JokeGenerator {
         });
     }
 
-    /**
-     * Share joke (Web Share API)
-     */
     async shareJoke() {
         if (!this.currentJoke) return;
 
         let jokeText = '';
         if (this.currentJoke.setup && this.currentJoke.delivery) {
-            jokeText = `${this.currentJoke.setup}\\n${this.currentJoke.delivery}`;
+            jokeText = `${this.currentJoke.setup}\n${this.currentJoke.delivery}`;
         } else if (this.currentJoke.joke) {
             jokeText = this.currentJoke.joke;
         }
@@ -138,14 +119,10 @@ class JokeGenerator {
                 console.error('Share failed:', err);
             }
         } else {
-            // Fallback: copy to clipboard
             this.copyJoke();
         }
     }
 
-    /**
-     * Add joke to history
-     */
     addToHistory(joke) {
         const historyItem = {
             id: Date.now(),
@@ -166,9 +143,6 @@ class JokeGenerator {
         this.displayHistory();
     }
 
-    /**
-     * Display history
-     */
     displayHistory() {
         const historyList = document.getElementById('historyList');
         const historyCount = document.getElementById('historyCount');
@@ -192,9 +166,6 @@ class JokeGenerator {
         `).join('');
     }
 
-    /**
-     * Load a joke from history
-     */
     loadFromHistory(id) {
         const item = this.jokeHistory.find(h => h.id === id);
         if (!item) return;
@@ -208,9 +179,6 @@ class JokeGenerator {
         this.showToast('Loaded from history! 📜', 'success');
     }
 
-    /**
-     * Clear all history
-     */
     clearHistory() {
         if (confirm('Are you sure you want to clear all history?')) {
             this.jokeHistory = [];
@@ -220,16 +188,10 @@ class JokeGenerator {
         }
     }
 
-    /**
-     * Save history to localStorage
-     */
     saveHistory() {
         localStorage.setItem('jokeHistory', JSON.stringify(this.jokeHistory));
     }
 
-    /**
-     * Load history from localStorage
-     */
     loadHistory() {
         const saved = localStorage.getItem('jokeHistory');
         if (saved) {
@@ -242,32 +204,21 @@ class JokeGenerator {
         }
     }
 
-    /**
-     * Set filter for joke type
-     */
     setFilter(filter) {
         this.currentFilter = filter;
 
-        // Update active button
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         event.target.classList.add('active');
 
-        // Get new joke with filter
         this.getNewJoke();
     }
 
-    /**
-     * Update statistics
-     */
     updateStats() {
         document.getElementById('jokesCount').textContent = this.jokesLoaded;
     }
 
-    /**
-     * Update API status
-     */
     updateAPIStatus(isOnline) {
         const statusEl = document.getElementById('apiStatus');
         if (isOnline) {
@@ -279,9 +230,6 @@ class JokeGenerator {
         }
     }
 
-    /**
-     * Show toast notification
-     */
     showToast(message, type = 'info') {
         const toast = document.getElementById('toast');
         toast.textContent = message;
@@ -293,7 +241,6 @@ class JokeGenerator {
     }
 }
 
-// Global functions for HTML onclick handlers
 function getNewJoke() {
     app.getNewJoke();
 }
@@ -314,5 +261,4 @@ function clearHistory() {
     app.clearHistory();
 }
 
-// Initialize the app
 let app = new JokeGenerator();
